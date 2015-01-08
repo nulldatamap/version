@@ -1,0 +1,15 @@
+# version
+`version` is a very simple library which job is to return the version of your crate if you're building with Cargo.
+
+## Usage:
+```rust
+#[macro_use]
+extern crate version;
+
+// ...
+
+version!() // Returns something like "1.0.0"
+```
+
+## Notes:
+This only works if you're building with Cargo since the macro fetches the version digits from enviroment variables set by Cargo ( CARGO_PKG_VERSION_{MAJOR, MINOR, PATCH} ).

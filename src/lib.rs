@@ -1,5 +1,6 @@
 #![feature(macro_rules)]
 
+#[macro_export]
 macro_rules! version(
   () => (
     format!( "{}.{}.{}", env!( "CARGO_PKG_VERSION_MAJOR" )
