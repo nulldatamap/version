@@ -9,10 +9,12 @@ pub struct Version {
   pub patch : u32
 }
 
+/// Gets the current version. If the enviroment is invalid it will panic.
 pub fn current() -> Version {
   try_current().expect( "Failed to get current version" )
 }
 
+/// Tries to get the current version, returning a parse error if it fails.
 pub fn try_current() -> Result<Version, ParseIntError> {
   Ok( Version {
     major : try!( env!( "CARGO_PKG_VERSION_MAJOR" ).parse::<u32>() ),
@@ -27,6 +29,7 @@ impl Display for Version {
   }
 }
 
+/// Gets the current version as a string.
 #[macro_export]
 macro_rules! version(
   () => (

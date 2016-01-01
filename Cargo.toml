@@ -3,3 +3,11 @@
 name = "version"
 version = "1.0.1"
 authors = ["Nulldata <nulldatamap@gmail.com>"]
+
+description = "A very simple library who's job is to return the version of your crate if you're building with Cargo."
+license  = "GPL-3.0"
+
+repository = "https://github.com/nulldatamap/version"
+readme = "README.md"
+
+keywords = [ "version" ]
