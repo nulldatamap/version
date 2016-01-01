@@ -9,6 +9,8 @@ extern crate version;
 // ...
 
 version!() // Returns something like "1.0.0"
+
+let ver : Version = current();
 ```
 
 ## Notes:
