@@ -42,7 +42,7 @@ macro_rules! version(
 #[test]
 fn does_it_work() {
   let ver = try_current();
-  assert_eq!( ver, Ok( Version { major: 1, minor: 0, patch: 1 } ) );
+  assert_eq!( ver, Ok( Version { major: 1, minor: 1, patch: 0 } ) );
   // Bad test is bad.
-  assert_eq!( version!(), "1.0.1" );
+  assert_eq!( version!(), "1.1.0" );
 }
