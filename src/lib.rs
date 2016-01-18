@@ -1,6 +1,7 @@
 use std::fmt;
 use std::fmt::Display;
 use std::num::ParseIntError;
+use std::convert::Into;
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct Version {
@@ -27,6 +28,13 @@ impl Display for Version {
   fn fmt( &self, fmtr : &mut fmt::Formatter ) -> fmt::Result {
     write!( fmtr, "{}.{}.{}", self.major, self.minor, self.patch )
   }
+}
+
+impl Into<String> for Version {
+
+    fn into(self) -> String {
+        format!("{}.{}.{}", self.major, self.minor, self.patch)
+    }
 }
 
 /// Gets the current version as a string.
