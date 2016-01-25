@@ -52,17 +52,13 @@ impl FromStr for Version {
 /// Gets the current version as a string.
 #[macro_export]
 macro_rules! version(
-  () => (
-    format!( "{}.{}.{}", env!( "CARGO_PKG_VERSION_MAJOR" )
-                       , env!( "CARGO_PKG_VERSION_MINOR" )
-                       , env!( "CARGO_PKG_VERSION_PATCH" ) )
-  )
+  () => ( env!( "CARGO_PKG_VERSION" ) )
 );
 
 #[test]
 fn does_it_work() {
   let ver = FromStr::from_str( &version!() );
-  assert_eq!( ver, Ok( Version { major: 2, minor: 0, patch: 0 } ) );
+  assert_eq!( ver, Ok( Version { major: 2, minor: 0, patch: 1 } ) );
 
   let invalids = [ "nope", "1.0", "1.0.x", "1.x.0", "x.0.1", "x.x.x" ];
 
@@ -72,5 +68,5 @@ fn does_it_work() {
   }
 
   // Bad test is bad.
-  assert_eq!( version!(), "2.0.0" );
+  assert_eq!( version!(), "2.0.1" );
 }
