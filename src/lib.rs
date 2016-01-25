@@ -1,6 +1,6 @@
 use std::fmt;
 use std::fmt::Display;
-use std::num::ParseIntError;
+use std::str::FromStr;
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct Version {
@@ -9,23 +9,43 @@ pub struct Version {
   pub patch : u32
 }
 
-/// Gets the current version. If the enviroment is invalid it will panic.
-pub fn current() -> Version {
-  try_current().expect( "Failed to get current version" )
-}
-
-/// Tries to get the current version, returning a parse error if it fails.
-pub fn try_current() -> Result<Version, ParseIntError> {
-  Ok( Version {
-    major : try!( env!( "CARGO_PKG_VERSION_MAJOR" ).parse::<u32>() ),
-    minor : try!( env!( "CARGO_PKG_VERSION_MINOR" ).parse::<u32>() ),
-    patch : try!( env!( "CARGO_PKG_VERSION_PATCH" ).parse::<u32>() ),
-  } )
-}
-
 impl Display for Version {
   fn fmt( &self, fmtr : &mut fmt::Formatter ) -> fmt::Result {
     write!( fmtr, "{}.{}.{}", self.major, self.minor, self.patch )
+  }
+}
+
+impl FromStr for Version {
+  type Err = String;
+
+  fn from_str( s : &str ) -> Result<Version, Self::Err> {
+    let parts : Vec<Result<u32, &str>> =
+      s.split( '.' )
+      .map( | elm | elm.parse::<u32>()
+                             .map_err( |_| elm ) )
+      .collect();
+
+    if parts.len() != 3 {
+      return
+        Err( format!( "Invalid version format: expected 3 components, got {}."
+           , parts.len() ) );
+    }
+
+    for part in &parts {
+      match part {
+        &Err( err ) =>
+          return
+            Err( format!( "Invalid version format: expected integer, got '{}'."
+                         , err ) ),
+        _ => {}
+      }
+    }
+
+    Ok( Version {
+      major: parts[0].unwrap(),
+      minor: parts[1].unwrap(),
+      patch: parts[2].unwrap()
+    } )
   }
 }
 
@@ -41,8 +61,16 @@ macro_rules! version(
 
 #[test]
 fn does_it_work() {
-  let ver = try_current();
-  assert_eq!( ver, Ok( Version { major: 1, minor: 1, patch: 0 } ) );
+  let ver = FromStr::from_str( &version!() );
+  assert_eq!( ver, Ok( Version { major: 2, minor: 0, patch: 0 } ) );
+
+  let invalids = [ "nope", "1.0", "1.0.x", "1.x.0", "x.0.1", "x.x.x" ];
+
+  for invalid in &invalids {
+    let invv : Result<Version, String> = FromStr::from_str( invalid );
+    assert!( invv.is_err() );
+  }
+
   // Bad test is bad.
-  assert_eq!( version!(), "1.1.0" );
+  assert_eq!( version!(), "2.0.0" );
 }
