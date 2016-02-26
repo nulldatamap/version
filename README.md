@@ -10,7 +10,7 @@ extern crate version;
 
 version!() // Returns something like "1.0.0"
 
-let ver : Version = current();
+let ver : Version = FromStr::from_str( version!() ).unwrap();
 ```
 
 ## Notes:
