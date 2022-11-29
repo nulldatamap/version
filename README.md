@@ -14,4 +14,4 @@ let ver : Version = FromStr::from_str( version!() ).unwrap();
 ```
 
 ## Notes:
-This only works if you're building with Cargo since the macro fetches the version digits from enviroment variables set by Cargo ( `CARGO_PKG_VERSION_{MAJOR, MINOR, PATCH}` ).
+This only works if you're building with Cargo since the macro fetches the version digits from enviroment variables set by Cargo ( `CARGO_PKG_VERSION` ).
